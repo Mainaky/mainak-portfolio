@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import SkillBar from "./components/SkillBar";
 import ProjectShowcase from "./components/ProjectShowcase";
 import { NAV_LINKS, SKILLS, PROJECTS, EXPERIENCE, ABOUT_CARDS, SOCIAL } from "./data";
-import emailjs from "emailjs-com";
+import emailjs from '@emailjs/browser';
 
 // ─── tiny helpers ────────────────────────────────────────────────────────────
 const ACCENT = "#7c6fff";
