@@ -214,7 +214,7 @@ export default function App() {
             paddingTop: 40, borderTop: "1px solid rgba(255,255,255,0.06)",
           }}>
             {[
-              ["7.55","CGPA"],["4+","ML Projects"],["1","Published Paper"],["96.2%","JEE Percentile"],
+              ["4+","ML Projects"],["1","Published Paper"],["96.2%","JEE Percentile"],
             ].map(([n,l]) => (
               <div key={l} style={{ textAlign: "center" }}>
                 <span style={{
