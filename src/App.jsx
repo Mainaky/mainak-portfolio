@@ -39,28 +39,24 @@ export default function App() {
     document.getElementById(section.toLowerCase())?.scrollIntoView({ behavior: "smooth" });
   };
 
-const handleSubmit = (e) => {
+const sendEmail = (e) => {
   e.preventDefault();
 
-  emailjs.send(
-    "service_9k3qcde",        // ✔ tumhara service id
-    "template_fw64p8k",       // ✔ tumhara template id
-    {
-      name: formData.name,
-      email: formData.email,
-      message: formData.message,
-    },
-    "o0vlF1tk5B4fj0sAk"         // ⚠️ yaha apna public key daalo
+  emailjs.sendForm(
+    'service_9k3qcde',        // tumhara service ID
+    'template_fw64p8k',       // tumhara template ID
+    e.target,
+    'o0vlF1tk5B4fj0sAk'         // public key
   )
-  .then(() => {
-    setSent(true);
-    setFormData({ name: "", email: "", message: "" });
-    setTimeout(() => setSent(false), 3000);
-  })
-  .catch((error) => {
-    console.error("FAILED...", error);
-    alert("Error sending message");
+  .then((result) => {
+      console.log(result.text);
+      alert("Message sent ✅");
+  }, (error) => {
+      console.log(error.text);
+      alert("Error ❌");
   });
+
+  e.target.reset();
 };
 
   // ─── shared styles ─────────────────────────────────────────────────────────
