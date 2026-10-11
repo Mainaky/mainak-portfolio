@@ -281,7 +281,8 @@ a:hover .arrow, button:hover .arrow { transform: translate(2px, -2px); }
   .hero-description { font-size: 13px; line-height: 1.85; }
   .hero-status { flex-wrap: wrap; gap: 7px; font-size: 8px; }
   .hero-socials { margin-top: 24px; }
-  .hero-visual { width: 100%; min-height: 430px; margin: 0 auto; justify-self: center; }
+  /* Reserve a clear gap after the social links before the hanging badge starts. */
+  .hero-visual { width: 100%; min-height: 430px; margin: 64px auto 0; justify-self: center; }
   .hero-visual::before { inset: 10% 2% 4%; }
   .lanyard { top: -8px; height: 75px; }
   .card-controls { margin-top: 22px; }
