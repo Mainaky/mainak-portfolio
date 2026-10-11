@@ -486,16 +486,16 @@ a:hover .arrow, button:hover .arrow { transform: translate(2px, -2px); }
 
 /* Put the real, interactive skill caps on a single keyboard deck. */
 .section-skills { overflow: visible; }
-.section-skills .section-wrap { width: min(1450px, calc(100% - 80px)); }
+.section-skills .section-wrap { width: min(1860px, calc(100% - 100px)); }
 .skill-stage {
-  padding: clamp(34px, 3.5vw, 54px);
+  padding: clamp(60px, 4vw, 72px) clamp(48px, 3.5vw, 68px);
   border: 1px solid rgba(157, 169, 194, .22);
   border-radius: 34px;
   background: linear-gradient(145deg, #151923 0%, #10131d 52%, #15141f 100%);
   box-shadow: 0 34px 70px rgba(0, 0, 0, .42), inset 0 2px 0 rgba(255, 255, 255, .09), inset 0 -8px 18px rgba(0, 0, 0, .3);
 }
 .keyboard-art { display: none; }
-.skill-grid { gap: 38px 22px; }
+.skill-grid { gap: 56px 28px; }
 .skill-card,
 .skill-card:nth-child(2n),
 .skill-card:hover {
@@ -509,17 +509,17 @@ a:hover .arrow, button:hover .arrow { transform: translate(2px, -2px); }
   transform: none;
 }
 .skill-card-top { min-height: 19px; }
-.skill-card h3 { margin: 11px 0 15px; font-size: 16px; }
-.skill-chips { gap: 12px 11px; }
+.skill-card h3 { margin: 13px 0 19px; font-size: 18px; }
+.skill-chips { gap: 12px 12px; }
 .skill-chips .skill-key {
-  min-height: 56px;
-  padding: 12px 15px 16px;
+  min-height: 72px;
+  padding: 16px 17px 20px;
   border-color: rgba(231, 242, 255, .28);
   border-radius: 11px 11px 8px 8px;
   color: #f8fbff;
   background: linear-gradient(150deg, var(--key-top), var(--key-bottom) 75%);
   box-shadow: 0 2px 0 color-mix(in srgb, var(--key-top), white 32%), 0 7px 0 #080b12, 0 10px 12px rgba(0, 0, 0, .42), inset 0 2px 2px rgba(255, 255, 255, .3), inset 0 -3px 3px rgba(0, 0, 0, .22);
-  font-size: 11px;
+  font-size: 12px;
   transition: transform .09s ease, filter .15s ease, box-shadow .09s ease;
 }
 .skill-chips .skill-key::before {
@@ -531,7 +531,7 @@ a:hover .arrow, button:hover .arrow { transform: translate(2px, -2px); }
   border-radius: 0 0 5px 5px;
   background: linear-gradient(180deg, color-mix(in srgb, var(--key-bottom), #080b12 28%), #080b12);
 }
-.skill-chips .skill-key::after { position: absolute; right: 7px; bottom: -6px; left: 7px; height: 4px; border-radius: 0 0 3px 3px; background: repeating-linear-gradient(90deg, rgba(210, 230, 255, .45) 0 2px, transparent 2px 8px); content: ""; }
+.skill-chips .skill-key::after { position: absolute; right: 7px; bottom: -7px; left: 7px; height: 6px; border-radius: 0 0 3px 3px; background: repeating-linear-gradient(90deg, rgba(210, 230, 255, .55) 0 2px, transparent 2px 8px); content: ""; }
 .skill-chips .skill-key:nth-child(6n + 1) { --key-top: #18afd0; --key-bottom: #08627d; }
 .skill-chips .skill-key:nth-child(6n + 2) { --key-top: #19a975; --key-bottom: #096347; }
 .skill-chips .skill-key:nth-child(6n + 3) { --key-top: #875fb1; --key-bottom: #4a3068; }
