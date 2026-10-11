@@ -6,6 +6,19 @@ import { EDUCATION, EXPERIENCE, HIGHLIGHTS, NAV_LINKS, PROJECTS, SKILL_GROUPS, S
 const roles = ["AI/ML Engineer", "Data Scientist", "Agentic AI Builder"];
 let keyboardAudioContext;
 
+const skillMarks = {
+  Python: "Py", Java: "♨", SQL: "SQL", Pandas: "pd", NumPy: "∑", EDA: "⌕",
+  "Feature Engineering": "ƒx", "Statistical Analysis": "σ", "Predictive Analytics": "↗", Excel: "X", "Power BI": "▥",
+  "Scikit-learn": "sk", TensorFlow: "TF", OpenCV: "CV", NLP: "NLP", CNNs: "▦", "U-Net": "U", VGG19: "V19",
+  "Transfer Learning": "↪", XGBoost: "XG", Prophet: "P", "K-means": "K", "Grad-CAM": "◎", Matplotlib: "MPL", Seaborn: "Sb",
+  "AI Agents": "AI", "Multi-agent Workflows": "↗", LangChain: "LC", LangGraph: "LG", RAG: "RAG", MCP: "MCP",
+  "LLM APIs": "LLM", "Context Engineering": "⌘", Evaluation: "✓", FastAPI: "⚡", "REST APIs": "API", "Next.js": "N",
+  "Express.js": "Ex", NestJS: "Nt", Struts: "S", JSP: "JSP", Servlets: "SV", Tomcat: "T", Microservices: "μs",
+  JDBC: "DB", "DAO Pattern": "DAO", JSON: "{}", PostgreSQL: "PG", MySQL: "My", "Oracle DB": "O",
+  MongoDB: "M", Snowflake: "❄", "AWS EC2": "EC2", "AWS S3": "S3", "AWS Lambda": "λ", Docker: "▰", Jenkins: "J",
+  "CI/CD": "∞", HDFS: "H", Git: "⑂", GitHub: "GH",
+};
+
 function playKeySound() {
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
   if (!AudioContextClass) return;
@@ -208,17 +221,13 @@ export default function App() {
 
         <section id="skills" className="section section-anchor section-tinted section-skills">
           <div className="section-wrap">
-            <SectionHeading eyebrow="TOOLS, METHODS & TECHNOLOGIES" title={<>A broad toolkit.<br /><span>One curious engineer.</span></>} note="Grouped around the kinds of problems I like solving." />
+            <div className="skill-heading"><h2>Skills</h2></div>
             <div className="skill-stage">
-              <div className="keyboard-art" aria-hidden="true">
-                {["⌘", "Py", "JS", "λ", "AI", "◈", "SQL", "{}", "ML", "<>", "◉", "Go", "TS", "{}", "↗", "DB", "∑", "⌥", "☁", "▦", "⌘", "API", "∴", "Git", "◌", "✓", "∞", "npm", "R", "⎈", "Jv", "CSS", "↻", "ML", "⌂", "↗"].map((key, index) => <span className={`keyboard-key key-${index % 7}`} key={`${key}-${index}`}>{key}</span>)}
-              </div>
-              <div className="skill-grid">
+              <div className="skill-board" aria-label="Mechanical keyboard of my skills">
               {SKILL_GROUPS.map((group, index) => (
-                <article className="skill-card glass-card" key={group.title}>
-                  <div className="skill-card-top"><span className="skill-number">0{index + 1}</span><span className="skill-mark">✳</span></div>
-                  <h3>{group.title}</h3>
-                  <div className="skill-chips">{group.skills.map((skill) => (
+                <article className={`keyboard-row keyboard-row-${index + 1}`} key={group.title} aria-label={group.title}>
+                  <p className="keyboard-row-label"><span>0{index + 1}</span>{group.title}</p>
+                  <div className="skill-chips" style={{ "--skill-count": group.skills.length }}>{group.skills.map((skill) => (
                     <button
                       className="skill-key"
                       key={skill}
@@ -227,7 +236,8 @@ export default function App() {
                       aria-label={`${skill}; play keyboard switch sound`}
                       type="button"
                     >
-                      {skill}
+                      <span className="skill-key-mark" aria-hidden="true">{skillMarks[skill] || skill.slice(0, 2)}</span>
+                      <span className="skill-key-label">{skill}</span>
                     </button>
                   ))}</div>
                 </article>
