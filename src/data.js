@@ -34,12 +34,11 @@ export const SKILL_GROUPS = [
 
 export const KEYBOARD_ROWS = [
   [
-    { name: "Python", mark: "Py" }, { name: "Java", mark: "JVM" }, { name: "SQL", mark: "⌕" },
-    { name: "Pandas", mark: "pd" }, { name: "NumPy", mark: "Σ" },
+    { name: "Python", mark: "Py" }, { name: "SQL", mark: "⌕" }, { name: "Pandas", mark: "pd" }, { name: "NumPy", mark: "Σ" },
   ],
   [
     { name: "Scikit-learn", mark: "sk" }, { name: "TensorFlow", mark: "TF" }, { name: "OpenCV", mark: "◉" },
-    { name: "NLP", mark: "NLP" }, { name: "CNNs", mark: "▦" }, { name: "XGBoost", mark: "XG" },
+    { name: "CNNs", mark: "▦" }, { name: "XGBoost", mark: "XG" },
   ],
   [
     { name: "LangChain", mark: "LC" }, { name: "LangGraph", mark: "LG" }, { name: "RAG", mark: "RAG" },
@@ -47,7 +46,7 @@ export const KEYBOARD_ROWS = [
   ],
   [
     { name: "AWS EC2", mark: "EC2" }, { name: "AWS S3", mark: "S3" }, { name: "AWS Lambda", mark: "λ" },
-    { name: "Snowflake", mark: "❄" }, { name: "Docker", mark: "◈" }, { name: "Git", mark: "⑂" }, { name: "GitHub", mark: "GH" },
+    { name: "Apache Spark", mark: "✦" }, { name: "Snowflake", mark: "❄" }, { name: "Git", mark: "⑂" }, { name: "GitHub", mark: "GH" },
   ],
 ];
 

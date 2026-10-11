@@ -612,8 +612,8 @@ a:hover .arrow, button:hover .arrow { transform: translate(2px, -2px); }
 .skill-heading { margin: 0 auto 24px; text-align: center; }
 .skill-heading h2 { position: relative; display: inline-block; margin: 0; padding-bottom: 17px; color: #4e6dff; background: linear-gradient(100deg, #3475ff, #a13eff); background-clip: text; -webkit-text-fill-color: transparent; font-size: clamp(2.8rem, 5.4vw, 4rem); font-weight: 800; line-height: 1; letter-spacing: -.055em; }
 .skill-heading h2::after { position: absolute; bottom: 0; left: 50%; width: 112px; height: 4px; border-radius: 9px; background: linear-gradient(90deg, #3f83ff, #9d3fff); content: ""; transform: translateX(-50%); }
-.section-skills .skill-stage { display: grid; place-items: center; position: relative; isolation: isolate; padding: 38px 18px 82px; overflow: visible; perspective: 1250px; }
-.skill-board { position: relative; width: max-content; max-width: 100%; padding: clamp(18px, 2.4vw, 30px); border: 1px solid rgba(174, 188, 214, .18); border-radius: 28px; background: linear-gradient(145deg, #1a1d27 0%, #10131c 60%, #191823 100%); box-shadow: 0 8px 0 #10121a, 0 17px 0 #090b12, 0 34px 42px rgba(0, 0, 0, .5), inset 0 2px 0 rgba(255,255,255,.09), inset 0 -8px 16px rgba(0,0,0,.4); transform: rotateX(42deg) rotateZ(-27deg); transform-style: preserve-3d; }
+.section-skills .skill-stage { display: grid; place-items: center; position: relative; isolation: isolate; padding: 25px 0 45px; overflow: visible; border: 0; border-radius: 0; background: transparent; box-shadow: none; perspective: 1500px; }
+.skill-board { position: relative; width: max-content; max-width: 100%; padding: clamp(14px, 1.8vw, 24px); border: 1px solid rgba(174, 188, 214, .2); border-radius: 25px; background: linear-gradient(145deg, #181b24 0%, #10131c 60%, #191823 100%); box-shadow: 0 8px 0 #10121a, 0 17px 0 #090b12, 0 34px 42px rgba(0, 0, 0, .5), inset 0 2px 0 rgba(255,255,255,.09), inset 0 -8px 16px rgba(0,0,0,.4); transform: rotateX(48deg) rotateZ(-26deg); transform-style: preserve-3d; }
 .skill-board::before { position: absolute; inset: 9px; border: 1px solid rgba(174, 188, 214, .06); border-radius: 21px; content: ""; pointer-events: none; }
 .keyboard-deck { display: grid; gap: clamp(7px, .9vw, 12px); position: relative; z-index: 1; }
 .keyboard-row { display: flex; justify-content: center; gap: clamp(7px, .9vw, 12px); }
@@ -623,8 +623,8 @@ a:hover .arrow, button:hover .arrow { transform: translate(2px, -2px); }
 .skill-key { --key-top: #16afd0; --key-bottom: #075c7b; position: relative; width: clamp(70px, 8vw, 94px); height: clamp(74px, 8vw, 96px); padding: 8px 4px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; appearance: none; cursor: pointer; border: 1px solid rgba(239, 246, 255, .3); border-radius: 15px 15px 12px 12px; color: #fff; background: linear-gradient(150deg, var(--key-top), var(--key-bottom) 82%); box-shadow: 0 2px 0 color-mix(in srgb, var(--key-top), white 40%), 0 8px 0 #090c13, 0 12px 14px rgba(0,0,0,.42), inset 0 3px 3px rgba(255,255,255,.3), inset 0 -5px 6px rgba(0,0,0,.24); text-shadow: 0 1px 2px rgba(0,0,0,.38); transition: transform .12s ease, filter .15s ease, box-shadow .12s ease; }
 .skill-key::before { position: absolute; right: 7px; bottom: -7px; left: 7px; z-index: -1; height: 8px; border: 1px solid rgba(5,8,14,.9); border-top: 0; border-radius: 0 0 5px 5px; background: linear-gradient(180deg, color-mix(in srgb, var(--key-bottom), #080b12 20%), #080b12); content: ""; }
 .skill-key::after { position: absolute; right: 9px; bottom: -8px; left: 9px; height: 7px; border-radius: 0 0 3px 3px; background: repeating-linear-gradient(90deg, rgba(223,237,255,.58) 0 2px, transparent 2px 8px); content: ""; }
-.skill-key-mark { min-width: 31px; min-height: 31px; padding: 4px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.22); border-radius: 9px; color: #fff; background: rgba(255,255,255,.1); font: 800 clamp(14px, 1.3vw, 19px)/1 var(--sans); letter-spacing: -.07em; text-shadow: 0 1px 2px rgba(0,0,0,.35); }
-.skill-key-label { max-width: 100%; color: rgba(255,255,255,.98); font: 800 clamp(7px, .62vw, 9px)/1.1 var(--mono); letter-spacing: -.025em; overflow-wrap: anywhere; text-align: center; }
+.skill-key-mark { min-width: 31px; min-height: 31px; display: grid; place-items: center; color: #fff; font: 900 clamp(18px, 1.55vw, 24px)/1 var(--sans); letter-spacing: -.08em; text-shadow: 0 2px 2px rgba(0,0,0,.35); }
+.skill-key-label { max-width: 100%; color: rgba(255,255,255,.98); font: 800 clamp(8px, .7vw, 10px)/1.1 var(--mono); letter-spacing: -.025em; overflow-wrap: anywhere; text-align: center; }
 .key-color-0 { --key-top: #16afd0; --key-bottom: #075c7b; }
 .key-color-1 { --key-top: #19aa76; --key-bottom: #075d43; }
 .key-color-2 { --key-top: #895fb2; --key-bottom: #492e67; }
@@ -638,20 +638,20 @@ a:hover .arrow, button:hover .arrow { transform: translate(2px, -2px); }
   .section-skills .section-wrap { width: min(100% - 30px, 640px); }
   .skill-heading { margin-bottom: 18px; }
   .section-skills .skill-stage { padding: 24px 0 40px; }
-  .skill-board { padding: 16px; border-radius: 22px; transform: rotateX(35deg) rotateZ(-16deg); }
+  .skill-board { padding: 13px; border-radius: 18px; transform: rotateX(40deg) rotateZ(-19deg); }
   .keyboard-deck { gap: 7px; }
   .keyboard-row { gap: 6px; }
   .skill-key { width: clamp(45px, 11.1vw, 72px); height: clamp(57px, 13vw, 76px); padding: 5px 2px 7px; gap: 4px; border-radius: 11px 11px 8px 8px; }
-  .skill-key-mark { min-width: 24px; min-height: 24px; padding: 2px; border-radius: 6px; font-size: clamp(11px, 3vw, 15px); }
+  .skill-key-mark { min-width: 24px; min-height: 24px; font-size: clamp(13px, 3.5vw, 17px); }
   .skill-key-label { font-size: clamp(6px, 1.55vw, 8px); }
 }
 @media (max-width: 430px) {
   .section-skills .section-wrap { width: calc(100% - 20px); }
-  .skill-board { padding: 12px 8px; transform: rotateX(29deg) rotateZ(-10deg); }
+  .skill-board { padding: 9px 6px; transform: rotateX(36deg) rotateZ(-12deg); }
   .keyboard-deck, .keyboard-row { gap: 5px; }
   .skill-key { width: clamp(39px, 10.7vw, 50px); height: 58px; }
   .skill-key-label { font-size: 5.5px; }
-  .skill-key-mark { min-width: 21px; min-height: 21px; font-size: 10px; }
+  .skill-key-mark { min-width: 21px; min-height: 21px; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .skill-key { transition: none; } }
 /* Keep the résumé easy to preview and download from any section of the site. */
