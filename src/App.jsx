@@ -69,7 +69,6 @@ export default function App() {
   const [cardFlipped, setCardFlipped] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
   const [formStatus, setFormStatus] = useState("idle");
-  const [selectedSkills, setSelectedSkills] = useState(() => new Set());
 
   useEffect(() => {
     const timer = window.setInterval(() => setRoleIndex((index) => (index + 1) % roles.length), 3200);
@@ -94,15 +93,7 @@ export default function App() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const toggleSkill = (skill) => {
-    setSelectedSkills((current) => {
-      const next = new Set(current);
-      if (next.has(skill)) next.delete(skill);
-      else next.add(skill);
-      return next;
-    });
-    playKeySound();
-  };
+  const pressSkill = () => playKeySound();
 
   const sendEmail = async (event) => {
     event.preventDefault();
@@ -229,11 +220,11 @@ export default function App() {
                   <h3>{group.title}</h3>
                   <div className="skill-chips">{group.skills.map((skill) => (
                     <button
-                      aria-pressed={selectedSkills.has(skill)}
-                      className={`skill-key${selectedSkills.has(skill) ? " is-pressed" : ""}`}
+                      className="skill-key"
                       key={skill}
-                      onClick={() => toggleSkill(skill)}
+                      onClick={pressSkill}
                       onKeyDown={(event) => { if (event.repeat && ["Enter", " "].includes(event.key)) event.preventDefault(); }}
+                      aria-label={`${skill}; play keyboard switch sound`}
                       type="button"
                     >
                       {skill}

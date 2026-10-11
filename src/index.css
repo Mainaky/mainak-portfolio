@@ -484,30 +484,98 @@ a:hover .arrow, button:hover .arrow { transform: translate(2px, -2px); }
   transform: translateY(-2px);
 }
 
+/* Put the real, interactive skill caps on a single keyboard deck. */
+.section-skills { overflow: visible; }
+.skill-stage {
+  padding: clamp(22px, 3vw, 42px);
+  border: 1px solid rgba(150, 172, 211, .16);
+  border-radius: 28px;
+  background: linear-gradient(145deg, #171c28 0%, #0b101b 58%, #171525 100%);
+  box-shadow: 0 34px 70px rgba(0, 0, 0, .42), inset 0 2px 0 rgba(255, 255, 255, .075), inset 0 -8px 18px rgba(0, 0, 0, .38);
+}
+.keyboard-art { display: none; }
+.skill-grid { gap: clamp(17px, 2vw, 29px) 22px; }
+.skill-card,
+.skill-card:nth-child(2n),
+.skill-card:hover {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  transform: none;
+}
+.skill-card-top { min-height: 19px; }
+.skill-card h3 { margin: 10px 0 12px; font-size: 13px; }
+.skill-chips { gap: 10px 9px; }
+.skill-chips .skill-key {
+  min-height: 44px;
+  padding: 9px 12px 12px;
+  border-color: rgba(230, 239, 255, .25);
+  border-radius: 10px 10px 8px 8px;
+  color: #f5f7ff;
+  background: linear-gradient(150deg, var(--key-top), var(--key-bottom) 75%);
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--key-top), white 28%), 0 7px 0 #080b12, 0 10px 12px rgba(0, 0, 0, .42), inset 0 2px 2px rgba(255, 255, 255, .24), inset 0 -3px 3px rgba(0, 0, 0, .2);
+  transition: transform .09s ease, filter .15s ease, box-shadow .09s ease;
+}
+.skill-chips .skill-key::before {
+  right: 5px;
+  bottom: -6px;
+  left: 5px;
+  height: 8px;
+  border-color: rgba(4, 8, 15, .9);
+  border-radius: 0 0 5px 5px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--key-bottom), #080b12 28%), #080b12);
+}
+.skill-chips .skill-key:nth-child(6n + 1) { --key-top: #139ec6; --key-bottom: #075374; }
+.skill-chips .skill-key:nth-child(6n + 2) { --key-top: #149d68; --key-bottom: #07563e; }
+.skill-chips .skill-key:nth-child(6n + 3) { --key-top: #7850a7; --key-bottom: #39264f; }
+.skill-chips .skill-key:nth-child(6n + 4) { --key-top: #d46a30; --key-bottom: #77341e; }
+.skill-chips .skill-key:nth-child(6n + 5) { --key-top: #175ba7; --key-bottom: #10345e; }
+.skill-chips .skill-key:nth-child(6n) { --key-top: #ae3158; --key-bottom: #601d38; }
+.skill-chips .skill-key:hover {
+  filter: brightness(1.2);
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--key-top), white 28%), 0 7px 0 #080b12, 0 10px 17px rgba(0, 0, 0, .42), 0 0 17px color-mix(in srgb, var(--key-top), transparent 68%), inset 0 2px 2px rgba(255, 255, 255, .27);
+  transform: translateY(-2px);
+}
+.skill-chips .skill-key:active {
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--key-top), white 28%), 0 2px 0 #080b12, 0 3px 5px rgba(0, 0, 0, .34), inset 0 1px 2px rgba(255, 255, 255, .17);
+  transform: translateY(5px);
+}
+
+/* The strap and card share a pivot so the badge swings as one hanging object. */
+.lanyard {
+  top: -185px;
+  height: 315px;
+  animation: id-sway 5.8s ease-in-out infinite;
+}
+.profile-card-button { animation: id-sway 5.8s ease-in-out infinite; }
+@keyframes id-sway {
+  0%, 100% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateX(0); }
+  18% { transform: rotateX(-1deg) rotateY(1.2deg) rotateZ(1.9deg) translateX(3px); }
+  47% { transform: rotateX(1.3deg) rotateY(-1deg) rotateZ(-1.5deg) translateX(-2px); }
+  73% { transform: rotateX(-.7deg) rotateY(.8deg) rotateZ(1deg) translateX(2px); }
+}
+
 @media (max-width: 760px) {
   .site-header { padding-inline: 10px; }
-  .lanyard { top: -8px; height: 75px; }
+  .lanyard { top: -70px; height: 145px; }
   .nav-shell { min-height: 54px; }
   .menu-toggle { width: 39px; height: 39px; border-color: rgba(218, 228, 248, .36); border-radius: 12px; background: rgba(255, 255, 255, .055); }
   .menu-toggle span { width: 17px; }
   .desktop-nav { border-radius: 4px 4px 15px 15px; }
   .section-heading { text-align: center; }
   .section-heading h2 { padding-bottom: 15px; }
-  .skill-stage { padding-top: 8px; }
-  .keyboard-art {
-    top: 9%;
-    width: 130%;
-    min-height: 520px;
-    padding: 35px;
-    grid-template-columns: repeat(7, minmax(32px, 1fr));
-    gap: 9px;
-    opacity: .45;
-    transform: translateX(-50%) rotateX(48deg) rotateZ(-19deg) scale(.9);
-  }
+  .skill-stage { padding: 20px 16px; border-radius: 21px; }
+  .skill-grid { gap: 20px 16px; }
   .keyboard-key { min-height: 39px; border-radius: 8px; font-size: 10px; }
   .skill-grid { gap: 12px; }
   .skill-card, .skill-card:nth-child(4), .skill-card:nth-child(5) { padding: 17px 15px; }
-  .skill-chips .skill-key { min-height: 34px; padding: 7px 9px 8px; font-size: 9px; }
+  .skill-chips .skill-key { min-height: 38px; padding: 7px 9px 10px; font-size: 9px; }
+  .skill-grid { gap: 20px 16px; }
+  .skill-card, .skill-card:nth-child(4), .skill-card:nth-child(5) { min-height: 0; padding: 0; }
 }
 
 @media (max-width: 390px) {
