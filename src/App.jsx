@@ -1,23 +1,10 @@
 import { useEffect, useState } from "react";
 import emailjs from "@emailjs/browser";
 import portrait from "./Mainak Roy PNG.png";
-import { EDUCATION, EXPERIENCE, HIGHLIGHTS, NAV_LINKS, PROJECTS, SKILL_GROUPS, SOCIAL } from "./data";
+import { EDUCATION, EXPERIENCE, HIGHLIGHTS, KEYBOARD_ROWS, NAV_LINKS, PROJECTS, SOCIAL } from "./data";
 
 const roles = ["AI/ML Engineer", "Data Scientist", "Agentic AI Builder"];
 let keyboardAudioContext;
-
-const skillMarks = {
-  Python: "Py", Java: "♨", SQL: "SQL", Pandas: "pd", NumPy: "∑", EDA: "⌕",
-  "Feature Engineering": "ƒx", "Statistical Analysis": "σ", "Predictive Analytics": "↗", Excel: "X", "Power BI": "▥",
-  "Scikit-learn": "sk", TensorFlow: "TF", OpenCV: "CV", NLP: "NLP", CNNs: "▦", "U-Net": "U", VGG19: "V19",
-  "Transfer Learning": "↪", XGBoost: "XG", Prophet: "P", "K-means": "K", "Grad-CAM": "◎", Matplotlib: "MPL", Seaborn: "Sb",
-  "AI Agents": "AI", "Multi-agent Workflows": "↗", LangChain: "LC", LangGraph: "LG", RAG: "RAG", MCP: "MCP",
-  "LLM APIs": "LLM", "Context Engineering": "⌘", Evaluation: "✓", FastAPI: "⚡", "REST APIs": "API", "Next.js": "N",
-  "Express.js": "Ex", NestJS: "Nt", Struts: "S", JSP: "JSP", Servlets: "SV", Tomcat: "T", Microservices: "μs",
-  JDBC: "DB", "DAO Pattern": "DAO", JSON: "{}", PostgreSQL: "PG", MySQL: "My", "Oracle DB": "O",
-  MongoDB: "M", Snowflake: "❄", "AWS EC2": "EC2", "AWS S3": "S3", "AWS Lambda": "λ", Docker: "▰", Jenkins: "J",
-  "CI/CD": "∞", HDFS: "H", Git: "⑂", GitHub: "GH",
-};
 
 function playKeySound() {
   const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -223,25 +210,26 @@ export default function App() {
           <div className="section-wrap">
             <div className="skill-heading"><h2>Skills</h2></div>
             <div className="skill-stage">
-              <div className="skill-board" aria-label="Mechanical keyboard of my skills">
-              {SKILL_GROUPS.map((group, index) => (
-                <article className={`keyboard-row keyboard-row-${index + 1}`} key={group.title} aria-label={group.title}>
-                  <p className="keyboard-row-label"><span>0{index + 1}</span>{group.title}</p>
-                  <div className="skill-chips" style={{ "--skill-count": group.skills.length }}>{group.skills.map((skill) => (
-                    <button
-                      className="skill-key"
-                      key={skill}
-                      onClick={pressSkill}
-                      onKeyDown={(event) => { if (event.repeat && ["Enter", " "].includes(event.key)) event.preventDefault(); }}
-                      aria-label={`${skill}; play keyboard switch sound`}
-                      type="button"
-                    >
-                      <span className="skill-key-mark" aria-hidden="true">{skillMarks[skill] || skill.slice(0, 2)}</span>
-                      <span className="skill-key-label">{skill}</span>
-                    </button>
-                  ))}</div>
-                </article>
-              ))}
+              <div className="skill-board" aria-label="3D mechanical keyboard of selected technical skills">
+                <div className="keyboard-deck">
+                  {KEYBOARD_ROWS.map((row, rowIndex) => (
+                    <div className={`keyboard-row keyboard-row-${rowIndex + 1}`} key={rowIndex}>
+                      {row.map((skill, keyIndex) => (
+                        <button
+                          className={`skill-key key-color-${(rowIndex * 3 + keyIndex) % 6}`}
+                          key={skill.name}
+                          onClick={pressSkill}
+                          onKeyDown={(event) => { if (event.repeat && ["Enter", " "].includes(event.key)) event.preventDefault(); }}
+                          aria-label={`${skill.name}; play keyboard switch sound`}
+                          type="button"
+                        >
+                          <span className="skill-key-mark" aria-hidden="true">{skill.mark}</span>
+                          <span className="skill-key-label">{skill.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
