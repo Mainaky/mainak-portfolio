@@ -648,3 +648,27 @@ a:hover .arrow, button:hover .arrow { transform: translate(2px, -2px); }
   .skill-key-label { font-size: 8px; }
 }
 @media (prefers-reduced-motion: reduce) { .skill-board { transform: none; } }
+
+/* Keep the résumé easy to preview and download from any section of the site. */
+.resume-section { background: radial-gradient(ellipse at 75% 50%, rgba(58, 88, 170, .12), transparent 48%); }
+.resume-layout { display: grid; grid-template-columns: minmax(250px, .68fr) minmax(0, 1.32fr); align-items: center; gap: clamp(30px, 6vw, 90px); }
+.resume-copy .section-heading { margin: 0 0 28px; text-align: left; }
+.resume-copy .section-heading h2::after { left: 0; transform: none; }
+.resume-copy .section-heading > p { margin-inline: 0; }
+.resume-actions { display: flex; flex-wrap: wrap; gap: 11px; }
+.resume-actions .button { gap: 10px; text-decoration: none; }
+.resume-file-note { display: flex; align-items: center; gap: 9px; margin: 18px 0 0; color: #8996af; font: 500 10px var(--mono); }
+.resume-file-note span { padding: 5px 7px; border: 1px solid rgba(122, 157, 255, .3); border-radius: 6px; color: #a9bcff; background: rgba(72, 108, 205, .13); font-size: 9px; }
+.resume-preview { min-height: 680px; overflow: hidden; border-color: rgba(166, 188, 231, .19); border-radius: 18px; background: #e8ebf2; box-shadow: 0 24px 60px rgba(0, 0, 0, .34); }
+.resume-preview iframe { display: block; width: 100%; height: min(78vh, 900px); min-height: 680px; border: 0; background: #e8ebf2; }
+@media (max-width: 900px) {
+  .resume-layout { grid-template-columns: 1fr; gap: 28px; }
+  .resume-copy .section-heading { text-align: center; }
+  .resume-copy .section-heading h2::after { left: 50%; transform: translateX(-50%); }
+  .resume-copy .section-heading > p { margin-inline: auto; }
+  .resume-actions, .resume-file-note { justify-content: center; }
+}
+@media (max-width: 760px) {
+  .resume-preview, .resume-preview iframe { min-height: 560px; }
+  .resume-preview iframe { height: 72vh; }
+}

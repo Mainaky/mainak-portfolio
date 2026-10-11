@@ -311,6 +311,22 @@ export default function App() {
           </div>
         </section>
 
+        <section id="resume" className="section section-anchor section-tinted resume-section">
+          <div className="section-wrap resume-layout">
+            <div className="resume-copy">
+              <SectionHeading eyebrow="EXPERIENCE, PROJECTS & EDUCATION" title={<>My <span>résumé.</span></>} note="View my current résumé here, or download the PDF to keep a copy." />
+              <div className="resume-actions">
+                <a className="button button-primary" href="/Mainak-Roy-Resume.pdf" download="Mainak-Roy-Resume.pdf">Download résumé <Arrow /></a>
+                <a className="button button-quiet" href="/Mainak-Roy-Resume.pdf" target="_blank" rel="noreferrer">Open full PDF <Arrow /></a>
+              </div>
+              <p className="resume-file-note"><span aria-hidden="true">PDF</span> Mainak Roy · Résumé</p>
+            </div>
+            <div className="resume-preview glass-card">
+              <iframe title="Mainak Roy résumé PDF preview" src="/Mainak-Roy-Resume.pdf#view=FitH" />
+            </div>
+          </div>
+        </section>
+
         <section id="contact" className="section section-anchor contact-section">
           <div className="section-wrap contact-grid">
             <div>
