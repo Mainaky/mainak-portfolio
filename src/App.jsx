@@ -71,7 +71,7 @@ export default function App() {
       <header className="site-header">
         <div className="nav-shell">
           <a className="wordmark" href="#home" onClick={(event) => { event.preventDefault(); navigateTo("home"); }} aria-label="Mainak Roy portfolio home">
-            <span className="wordmark-dot">●</span> PORTFOLIO
+            PORTFOLIO
           </a>
           <nav className={`desktop-nav${menuOpen ? " nav-open" : ""}`} aria-label="Main navigation">
             {NAV_LINKS.map(({ label, id }) => (
@@ -160,17 +160,22 @@ export default function App() {
           </div>
         </section>
 
-        <section id="skills" className="section section-anchor section-tinted">
+        <section id="skills" className="section section-anchor section-tinted section-skills">
           <div className="section-wrap">
             <SectionHeading eyebrow="TOOLS, METHODS & TECHNOLOGIES" title={<>A broad toolkit.<br /><span>One curious engineer.</span></>} note="Grouped around the kinds of problems I like solving." />
-            <div className="skill-grid">
+            <div className="skill-stage">
+              <div className="keyboard-art" aria-hidden="true">
+                {["⌘", "Py", "JS", "λ", "AI", "◈", "SQL", "{}", "ML", "<>", "◉", "Go", "TS", "{}", "↗", "DB", "∑", "⌥", "☁", "▦", "⌘", "API", "∴", "Git", "◌", "✓", "∞", "npm", "R", "⎈", "Jv", "CSS", "↻", "ML", "⌂", "↗"].map((key, index) => <span className={`keyboard-key key-${index % 7}`} key={`${key}-${index}`}>{key}</span>)}
+              </div>
+              <div className="skill-grid">
               {SKILL_GROUPS.map((group, index) => (
                 <article className="skill-card glass-card" key={group.title}>
                   <div className="skill-card-top"><span className="skill-number">0{index + 1}</span><span className="skill-mark">✳</span></div>
                   <h3>{group.title}</h3>
-                  <div className="skill-chips">{group.skills.map((skill) => <span key={skill}>{skill}</span>)}</div>
+                  <div className="skill-chips">{group.skills.map((skill) => <span className="skill-key" key={skill}>{skill}</span>)}</div>
                 </article>
               ))}
+              </div>
             </div>
           </div>
         </section>
