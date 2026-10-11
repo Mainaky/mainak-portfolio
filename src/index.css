@@ -647,10 +647,11 @@ a:hover .arrow, button:hover .arrow { transform: translate(2px, -2px); }
 }
 @media (max-width: 430px) {
   .section-skills .section-wrap { width: calc(100% - 20px); }
-  .skill-board { padding: 9px 6px; transform: rotateX(36deg) rotateZ(-12deg); }
-  .keyboard-deck, .keyboard-row { gap: 5px; }
-  .skill-key { width: clamp(39px, 10.7vw, 50px); height: 58px; }
-  .skill-key-label { font-size: 5.5px; }
+  .section-skills .skill-stage { padding: 20px 0 32px; }
+  .skill-board { max-width: 100%; padding: 9px 6px; transform: perspective(900px) rotateX(25deg) rotateZ(-5deg); }
+  .keyboard-deck, .keyboard-row { gap: clamp(3px, 1vw, 5px); }
+  .skill-key { flex: 0 0 auto; width: clamp(31px, 10vw, 42px); height: 60px; padding-inline: 2px; }
+  .skill-key-label { font-size: clamp(6px, 1.8vw, 7.5px); line-height: 1.12; }
   .skill-key-mark { min-width: 21px; min-height: 21px; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .skill-key { transition: none; } }
