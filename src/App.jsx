@@ -153,7 +153,7 @@ export default function App() {
           </div>
 
           <div className="hero-visual">
-            <div className="lanyard" aria-hidden="true"><span>MAINAK ROY · DATA SCIENCE</span></div>
+            <div className="lanyard" aria-hidden="true"><span>MAINAK ROY · DATA SCIENCE · MAINAK ROY</span></div>
             <div className="card-controls">
               <span className="card-prompt">A LITTLE ABOUT ME</span>
               <button className="flip-button" onClick={() => setCardFlipped((flipped) => !flipped)} aria-label={cardFlipped ? "Show profile card front" : "Flip profile card to details"}>
