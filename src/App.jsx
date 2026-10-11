@@ -4,6 +4,50 @@ import portrait from "./Mainak Roy PNG.png";
 import { EDUCATION, EXPERIENCE, HIGHLIGHTS, NAV_LINKS, PROJECTS, SKILL_GROUPS, SOCIAL } from "./data";
 
 const roles = ["AI/ML Engineer", "Data Scientist", "Agentic AI Builder"];
+let keyboardAudioContext;
+
+function playKeySound() {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return;
+
+  try {
+    keyboardAudioContext ??= new AudioContextClass();
+    const audio = keyboardAudioContext;
+    if (audio.state === "suspended") audio.resume().catch(() => {});
+
+    const now = audio.currentTime;
+    const thock = audio.createOscillator();
+    const thockGain = audio.createGain();
+    thock.type = "triangle";
+    thock.frequency.setValueAtTime(210, now);
+    thock.frequency.exponentialRampToValueAtTime(82, now + 0.045);
+    thockGain.gain.setValueAtTime(0.0001, now);
+    thockGain.gain.exponentialRampToValueAtTime(0.12, now + 0.003);
+    thockGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.065);
+    thock.connect(thockGain);
+    thockGain.connect(audio.destination);
+    thock.start(now);
+    thock.stop(now + 0.07);
+
+    const buffer = audio.createBuffer(1, Math.floor(audio.sampleRate * 0.025), audio.sampleRate);
+    const samples = buffer.getChannelData(0);
+    for (let index = 0; index < samples.length; index += 1) samples[index] = (Math.random() * 2 - 1) * (1 - index / samples.length);
+    const click = audio.createBufferSource();
+    const filter = audio.createBiquadFilter();
+    const clickGain = audio.createGain();
+    click.buffer = buffer;
+    filter.type = "highpass";
+    filter.frequency.value = 1000;
+    clickGain.gain.setValueAtTime(0.07, now);
+    clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
+    click.connect(filter);
+    filter.connect(clickGain);
+    clickGain.connect(audio.destination);
+    click.start(now);
+  } catch {
+    // Keep the skill controls usable if audio is unavailable or blocked.
+  }
+}
 
 function SectionHeading({ eyebrow, title, note }) {
   return (
@@ -25,6 +69,7 @@ export default function App() {
   const [cardFlipped, setCardFlipped] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
   const [formStatus, setFormStatus] = useState("idle");
+  const [selectedSkills, setSelectedSkills] = useState(() => new Set());
 
   useEffect(() => {
     const timer = window.setInterval(() => setRoleIndex((index) => (index + 1) % roles.length), 3200);
@@ -47,6 +92,16 @@ export default function App() {
   const navigateTo = (id) => {
     setMenuOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const toggleSkill = (skill) => {
+    setSelectedSkills((current) => {
+      const next = new Set(current);
+      if (next.has(skill)) next.delete(skill);
+      else next.add(skill);
+      return next;
+    });
+    playKeySound();
   };
 
   const sendEmail = async (event) => {
@@ -172,7 +227,18 @@ export default function App() {
                 <article className="skill-card glass-card" key={group.title}>
                   <div className="skill-card-top"><span className="skill-number">0{index + 1}</span><span className="skill-mark">✳</span></div>
                   <h3>{group.title}</h3>
-                  <div className="skill-chips">{group.skills.map((skill) => <span className="skill-key" key={skill}>{skill}</span>)}</div>
+                  <div className="skill-chips">{group.skills.map((skill) => (
+                    <button
+                      aria-pressed={selectedSkills.has(skill)}
+                      className={`skill-key${selectedSkills.has(skill) ? " is-pressed" : ""}`}
+                      key={skill}
+                      onClick={() => toggleSkill(skill)}
+                      onKeyDown={(event) => { if (event.repeat && ["Enter", " "].includes(event.key)) event.preventDefault(); }}
+                      type="button"
+                    >
+                      {skill}
+                    </button>
+                  ))}</div>
                 </article>
               ))}
               </div>
