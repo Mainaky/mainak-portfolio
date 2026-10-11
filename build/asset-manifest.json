@@ -1,13 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.bd24c95d.css",
-    "main.js": "/static/js/main.7ad1e099.js",
+    "main.css": "/static/css/main.c099d42a.css",
+    "main.js": "/static/js/main.2a046f93.js",
+    "static/media/Mainak Roy PNG.png": "/static/media/Mainak Roy PNG.b48183fb176124865d55.png",
     "index.html": "/index.html",
-    "main.bd24c95d.css.map": "/static/css/main.bd24c95d.css.map",
-    "main.7ad1e099.js.map": "/static/js/main.7ad1e099.js.map"
+    "main.c099d42a.css.map": "/static/css/main.c099d42a.css.map",
+    "main.2a046f93.js.map": "/static/js/main.2a046f93.js.map"
   },
   "entrypoints": [
-    "static/css/main.bd24c95d.css",
-    "static/js/main.7ad1e099.js"
+    "static/css/main.c099d42a.css",
+    "static/js/main.2a046f93.js"
   ]
 }

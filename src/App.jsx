@@ -1,603 +1,276 @@
-import { useState, useEffect, useRef } from "react";
-import SkillBar from "./components/SkillBar";
-import ProjectShowcase from "./components/ProjectShowcase";
-import { NAV_LINKS, SKILLS, PROJECTS, EXPERIENCE, ABOUT_CARDS, SOCIAL } from "./data";
-import emailjs from '@emailjs/browser';
+import { useEffect, useState } from "react";
+import emailjs from "@emailjs/browser";
+import portrait from "./Mainak Roy PNG.png";
+import { EDUCATION, EXPERIENCE, HIGHLIGHTS, NAV_LINKS, PROJECTS, SKILL_GROUPS, SOCIAL } from "./data";
 
-// ─── tiny helpers ────────────────────────────────────────────────────────────
-const ACCENT = "#7c6fff";
-const mono   = "'JetBrains Mono', monospace";
-const serif  = "'EB Garamond', serif";
-const sans   = "'Plus Jakarta Sans', system-ui, sans-serif";
+const roles = ["AI/ML Engineer", "Data Scientist", "Agentic AI Builder"];
 
-const CAT_COLORS = {
-  "Core Languages": "#7c6fff",
-  "ML / DS":        "#e63946",
-  "ML Libraries":   "#00d4aa",
-  "Databases":      "#f4a261",
-  "Cloud & Tools":  "#a855f7",
-};
+function SectionHeading({ eyebrow, title, note }) {
+  return (
+    <div className="section-heading">
+      <span className="eyebrow">{eyebrow}</span>
+      <h2>{title}</h2>
+      {note && <p>{note}</p>}
+    </div>
+  );
+}
 
-// ─── Main App ────────────────────────────────────────────────────────────────
+function Arrow() {
+  return <span aria-hidden="true" className="arrow">↗</span>;
+}
+
 export default function App() {
-  const [active, setActive]               = useState("Home");
-  const [showShowcase, setShowShowcase]   = useState(false);
-  const [menuOpen, setMenuOpen]           = useState(false);
-  const [isMobile, setIsMobile]           = useState(window.innerWidth < 768);
-  const [formData, setFormData]           = useState({ name: "", email: "", message: "" });
-  const [sent, setSent]                   = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [cardFlipped, setCardFlipped] = useState(false);
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [formStatus, setFormStatus] = useState("idle");
 
   useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    const timer = window.setInterval(() => setRoleIndex((index) => (index + 1) % roles.length), 3200);
+    return () => window.clearInterval(timer);
   }, []);
 
-  const scrollTo = (section) => {
-    setActive(section);
+  useEffect(() => {
+    const sections = NAV_LINKS.map(({ id }) => document.getElementById(id)).filter(Boolean);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActiveSection(visible.target.id);
+      },
+      { rootMargin: "-25% 0px -60% 0px", threshold: [0, 0.15, 0.35, 0.6] },
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
+  const navigateTo = (id) => {
     setMenuOpen(false);
-    document.getElementById(section.toLowerCase())?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-const sendEmail = (e) => {
-  e.preventDefault();
-
-  emailjs.sendForm(
-    'service_9k3qcde',
-    'template_fw64p8k',
-    e.target,
-    'o0vlF1tk5B4fj0sAk'
-  )
-  .then(() => {
-    alert("Message sent ✅");
-  })
-  .catch(() => {
-    alert("Error ❌");
-  });
-
-  e.target.reset();
-};
-
-  // ─── shared styles ─────────────────────────────────────────────────────────
-  const sectionLabel = {
-    fontSize: 12, letterSpacing: 4, color: ACCENT,
-    textTransform: "uppercase", marginBottom: 14,
-    fontFamily: mono,
+  const sendEmail = async (event) => {
+    event.preventDefault();
+    setFormStatus("sending");
+    const form = event.currentTarget;
+    try {
+      await emailjs.sendForm("service_9k3qcde", "template_fw64p8k", form, "o0vlF1tk5B4fj0sAk");
+      form.reset();
+      setFormStatus("sent");
+    } catch {
+      setFormStatus("error");
+    }
   };
-  const sectionTitle = {
-    fontSize: "clamp(2rem,4vw,3rem)", fontWeight: 700,
-    fontFamily: serif, color: "#fff", marginBottom: 48,
-  };
-  const card = (hoverColor = ACCENT) => ({
-    background: "rgba(255,255,255,0.025)",
-    border: "1px solid rgba(255,255,255,0.07)",
-    borderRadius: 18, padding: "22px 20px",
-    transition: "border-color .25s, background .25s",
-    cursor: "default",
-  });
 
   return (
-    <div style={{
-      minHeight: "100vh", width: "100%",
-      background: "#080010", color: "#e2e8f0",
-      fontFamily: sans, overflowX: "hidden",
-    }}>
-      {/* ── Background orbs (fixed) ── */}
-      <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
-        {[
-          ["10%","15%","rgba(124,111,255,0.08)"],
-          ["50%","right 10%","rgba(0,212,170,0.06)"],
-          ["bottom 10%","40%","rgba(230,57,70,0.05)"],
-        ].map(([top,left,bg],i)=>(
-          <div key={i} style={{
-            position:"absolute", top, left,
-            width:380, height:380, borderRadius:"50%",
-            background:`radial-gradient(circle,${bg} 0%,transparent 70%)`,
-          }}/>
-        ))}
-      </div>
+    <div className="portfolio-shell">
+      <div className="ambient ambient-one" aria-hidden="true" />
+      <div className="ambient ambient-two" aria-hidden="true" />
+      <div className="ambient ambient-three" aria-hidden="true" />
 
-      {/* ── NAV ── */}
-      <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-        background: "rgba(8,0,16,0.88)", backdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(255,255,255,0.06)",
-        padding: "0 2.5rem", height: 64, width: "100%",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-      }}>
-        <div style={{ fontFamily: serif, fontSize: 20, fontWeight: 700, color: "#fff", flexShrink: 0 }}>
-          <span style={{ color: ACCENT }}>&lt;</span>MR<span style={{ color: ACCENT }}>/&gt;</span>
-        </div>
-
-        {!isMobile && (
-          <div style={{ display: "flex", gap: 28, alignItems: "center" }}>
-            {NAV_LINKS.map(l => (
-              <button key={l} onClick={() => scrollTo(l)} style={{
-                background: "none", border: "none", cursor: "pointer",
-                fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase",
-                color: active === l ? ACCENT : "rgba(255,255,255,0.5)",
-                fontWeight: active === l ? 600 : 400,
-                fontFamily: mono, padding: "4px 0", transition: "color .2s",
-              }}>{l}</button>
-            ))}
-          </div>
-        )}
-
-        {isMobile && (
-          <button onClick={() => setMenuOpen(v => !v)} style={{
-            background: "none", border: "none", color: "#fff", fontSize: 22, cursor: "pointer",
-          }}>
-            {menuOpen ? "✕" : "☰"}
-          </button>
-        )}
-      </nav>
-
-      {/* Mobile drawer */}
-      {isMobile && menuOpen && (
-        <div style={{
-          position: "fixed", top: 64, left: 0, right: 0, zIndex: 49,
-          background: "rgba(8,0,16,0.98)", borderBottom: "1px solid rgba(255,255,255,0.08)",
-          padding: "0.5rem 2rem 1rem",
-        }}>
-          {NAV_LINKS.map(l => (
-            <button key={l} onClick={() => scrollTo(l)} style={{
-              display: "block", width: "100%", textAlign: "left",
-              background: "none", border: "none", cursor: "pointer",
-              fontSize: 15, color: active === l ? ACCENT : "#e2e8f0",
-              padding: "12px 0", fontFamily: mono,
-              borderBottom: "1px solid rgba(255,255,255,0.05)",
-            }}>{l}</button>
-          ))}
-        </div>
-      )}
-
-      {/* ── HERO ── */}
-      <section id="home" style={{
-        minHeight: "100vh", display: "flex", alignItems: "center",
-        justifyContent: "center", position: "relative", zIndex: 1,
-        paddingTop: 64, width: "100%",
-      }}>
-        <div style={{ textAlign: "center", width: "100%", maxWidth: 860, padding: "0 5%" }}>
-          <div style={{ ...sectionLabel, marginBottom: 28 }}>
-            Open to Campus Placements · 2027
-          </div>
-
-          <h1 style={{
-            fontSize: "clamp(2.5rem,7vw,5rem)", fontWeight: 800,
-            lineHeight: 1.08, fontFamily: serif, color: "#fff", marginBottom: 24,
-          }}>
-            Hi, I'm{" "}
-            <span style={{ position: "relative", display: "inline-block" }}>
-              <span style={{ color: ACCENT }}>Mainak Roy</span>
-              <span style={{
-                position: "absolute", bottom: -4, left: 0, right: 0, height: 3,
-                background: `linear-gradient(90deg,${ACCENT},transparent)`,
-                borderRadius: 2,
-              }}/>
-            </span>
-          </h1>
-
-          <p style={{
-            fontSize: "clamp(1rem,2vw,1.25rem)",
-            color: "rgba(255,255,255,0.6)", lineHeight: 1.95, marginBottom: 44,
-            fontFamily: sans,
-          }}>
-            Data Science & ML Engineer — building{" "}
-            <span style={{ color: "#e2e8f0" }}>intelligent systems</span> grounded in
-            mathematics and statistics.{" "}
-            <span style={{ color: "#e2e8f0" }}>Published researcher</span> at ICICV 2026 ·{" "}
-            <span style={{ color: "#e2e8f0" }}>ISRO Hackathon 2025</span> participant.
-          </p>
-
-          <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-            <button
-              onClick={() => setShowShowcase(true)}
-              onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = `0 0 36px ${ACCENT}60`; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)";   e.currentTarget.style.boxShadow = "none"; }}
-              style={{
-                padding: "14px 34px", borderRadius: 50,
-                background: ACCENT, color: "#fff", border: "none",
-                fontSize: 14, fontWeight: 600, cursor: "pointer",
-                letterSpacing: 0.5, transition: "transform .2s, box-shadow .2s",
-                display: "flex", alignItems: "center", gap: 10,
-              }}
-            >
-              <span style={{ fontSize: 18 }}>🎬</span> View Projects
-            </button>
-            <button
-              onClick={() => scrollTo("Contact")}
-              onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)"}
-              onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"}
-              style={{
-                padding: "14px 34px", borderRadius: 50,
-                background: "transparent", color: "#e2e8f0",
-                border: "1px solid rgba(255,255,255,0.2)",
-                fontSize: 14, fontWeight: 500, cursor: "pointer",
-                transition: "border-color .2s",
-              }}
-            >
-              Get in Touch
-            </button>
-          </div>
-
-          {/* Quick stats */}
-          <div style={{
-            display: "flex", flexWrap: "wrap", justifyContent: "center",
-            gap: "2.5rem", marginTop: 64,
-            paddingTop: 40, borderTop: "1px solid rgba(255,255,255,0.06)",
-          }}>
-            {[
-              ["4+","ML Projects"],["1","Published Paper"],["96.2%","JEE Percentile"],
-            ].map(([n,l]) => (
-              <div key={l} style={{ textAlign: "center" }}>
-                <span style={{
-                  display: "block", fontSize: 36, fontWeight: 900,
-                  fontFamily: serif, lineHeight: 1,
-                  background: `linear-gradient(135deg,${ACCENT},#00d4aa)`,
-                  WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-                  backgroundClip: "text", marginBottom: 6,
-                }}>{n}</span>
-                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: mono }}>{l}</span>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ marginTop: 72, animation: "bounce 2s infinite", color: "rgba(255,255,255,0.2)", fontSize: 22 }}>↓</div>
-        </div>
-      </section>
-
-      {/* ── ABOUT ── */}
-      <section id="about" style={{ padding: "100px 5%", position: "relative", zIndex: 1 }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={sectionLabel}>About Me</div>
-          <h2 style={sectionTitle}>The story so far.</h2>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))", gap: 56, alignItems: "start" }}>
-            {/* Left — avatar + bio */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-              <div style={{
-                width: 180, height: 180, borderRadius: "50%", marginBottom: 26,
-                background: `linear-gradient(135deg,${ACCENT},#00d4aa)`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 72, boxShadow: `0 0 56px ${ACCENT}40`,
-              }}>
-  <img src="/Mainak Roy PNG.png" alt="Mainak Roy" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} />
-</div>
-              <h3 style={{ fontSize: 24, fontWeight: 700, color: "#fff", fontFamily: serif, marginBottom: 5 }}>Mainak Roy</h3>
-              <div style={{ fontSize: 13, color: ACCENT, fontFamily: mono, letterSpacing: 1.5, marginBottom: 24 }}>
-                Data Science · ML Engineer · B.Tech CSE
-              </div>
-              <p style={{ color: "rgba(255,255,255,0.7)", lineHeight: 2, fontSize: 15, marginBottom: 14 }}>
-                Final-year B.Tech Computer Science (Data Science) student at NIIT University, Neemrana.
-                Passionate about the mathematics and statistics behind intelligent systems.
-              </p>
-              <p style={{ color: "rgba(255,255,255,0.7)", lineHeight: 2, fontSize: 15 }}>
-                Published researcher at ICICV 2026. Nationally selected participant at the
-                ISRO Bharatiya Antariksh Hackathon 2025. Coordinator of the Ramanujan Mathematics Club.
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 26, justifyContent: "center" }}>
-                {["Python","TensorFlow","Scikit-Learn","NumPy","SQL","AWS"].map(tag => (
-                  <span key={tag} style={{
-                    fontSize: 12, padding: "5px 14px",
-                    background: `${ACCENT}18`, color: ACCENT,
-                    borderRadius: 20, border: `1px solid ${ACCENT}40`,
-                    fontFamily: mono,
-                  }}>{tag}</span>
-                ))}
-              </div>
-            </div>
-
-            {/* Right — info cards */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-              {ABOUT_CARDS.map(item => (
-                <div
-                  key={item.label}
-                  style={card(ACCENT)}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor=`${ACCENT}50`; e.currentTarget.style.background=`${ACCENT}08`; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor="rgba(255,255,255,0.07)"; e.currentTarget.style.background="rgba(255,255,255,0.025)"; }}
-                >
-                  <span style={{ fontSize: 22, display: "block", marginBottom: 10 }}>{item.icon}</span>
-                  <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", fontFamily: mono, textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 7 }}>{item.label}</div>
-                  <div style={{ fontSize: 15, color: "#e2e8f0", fontWeight: 500, lineHeight: 1.4 }}>{item.val}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── SKILLS ── */}
-      <section id="skills" style={{ padding: "100px 5%", position: "relative", zIndex: 1 }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={sectionLabel}>Skills</div>
-          <h2 style={sectionTitle}>Tech I work with.</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 48 }}>
-            {Object.keys(CAT_COLORS)
-              .filter(cat => SKILLS.some(s => s.cat === cat))
-              .map(cat => (
-                <div key={cat}>
-                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", letterSpacing: 2, textTransform: "uppercase", marginBottom: 18, fontFamily: mono }}>
-                    {cat}
-                  </div>
-                  {SKILLS.filter(s => s.cat === cat).map((s, i) => (
-                    <SkillBar key={s.name} {...s} delay={i * 150} />
-                  ))}
-                </div>
-              ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PROJECTS ── */}
-      <section id="projects" style={{ padding: "100px 5%", position: "relative", zIndex: 1 }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={sectionLabel}>Projects</div>
-          <h2 style={{ ...sectionTitle, marginBottom: 16 }}>Things I've built.</h2>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <p style={{ fontSize: 16, color: "rgba(255,255,255,0.5)", marginBottom: 52, lineHeight: 1.8, maxWidth: 580, textAlign: "center" }}>
-              From clinical AI to published research — hit the button below for a cinematic showcase of all 4 projects with a countdown reveal!
-            </p>
-          </div>
-
-          {/* Launch button */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 24, flexWrap: "wrap", marginBottom: 70 }}>
-            <button
-              onClick={() => setShowShowcase(true)}
-              onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.boxShadow = `0 0 60px ${ACCENT}60`; }}
-              onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = `0 0 40px ${ACCENT}35`; }}
-              style={{
-                padding: "18px 48px", borderRadius: 50,
-                background: `linear-gradient(135deg,${ACCENT},#5b4de0)`,
-                color: "#fff", border: "none", fontSize: 17, fontWeight: 700,
-                cursor: "pointer", letterSpacing: 0.5,
-                boxShadow: `0 0 40px ${ACCENT}35`,
-                transition: "transform .2s, box-shadow .2s",
-                display: "flex", alignItems: "center", gap: 12,
-              }}
-            >
-              <span style={{ fontSize: 20 }}>🎬</span>
-              Launch Project Showcase
-            </button>
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.28)", fontFamily: mono, lineHeight: 1.8 }}>
-              Countdown · Cinematic reveal<br />4 projects · GitHub links
-            </div>
-          </div>
-
-          {/* Static mini cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 16 }}>
-            {PROJECTS.map(p => (
-              <ProjectMiniCard key={p.id} p={p} onLaunch={() => setShowShowcase(true)} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── EXPERIENCE ── */}
-      <section id="experience" style={{ padding: "100px 5%", position: "relative", zIndex: 1 }}>
-        <div style={{ maxWidth: 900, margin: "0 auto" }}>
-          <div style={sectionLabel}>Experience & Research</div>
-          <h2 style={sectionTitle}>What I've done.</h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-            {EXPERIENCE.map((e, i) => (
-              <ExperienceCard key={i} exp={e} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CONTACT ── */}
-      <section id="contact" style={{ padding: "100px 5%", position: "relative", zIndex: 1 }}>
-        <div style={{ maxWidth: 680, margin: "0 auto" }}>
-          <div style={sectionLabel}>Contact</div>
-          <h2 style={{ ...sectionTitle, marginBottom: 10 }}>Let's talk.</h2>
-          <p style={{ color: "rgba(255,255,255,0.55)", marginBottom: 40, fontSize: 16 }}>
-            Open to Data Science &amp; ML Engineering placements. Drop a message!
-          </p>
-
-          <form onSubmit={sendEmail}>
-  {[
-    { key: "name", label: "Your Name", type: "text", ph: "Recruiter / Collaborator" },
-    { key: "email", label: "Email Address", type: "email", ph: "you@company.com" },
-  ].map(({ key, label, type, ph }) => (
-    <div key={key} style={{ marginBottom: 20 }}>
-      <label style={{
-        display: "block",
-        fontSize: 11,
-        color: "rgba(255,255,255,0.45)",
-        fontFamily: mono,
-        textTransform: "uppercase",
-        letterSpacing: 1.5,
-        marginBottom: 10
-      }}>
-        {label}
-      </label>
-
-      <input
-        name={key}   // ✅ IMPORTANT
-        type={type}
-        placeholder={ph}
-        required
-        value={formData[key]}
-        onChange={e => setFormData({ ...formData, [key]: e.target.value })}
-        onFocus={e => e.target.style.borderColor = ACCENT}
-        onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}
-        style={{
-          width: "100%",
-          padding: "14px 16px",
-          background: "rgba(255,255,255,0.04)",
-          border: "1px solid rgba(255,255,255,0.1)",
-          borderRadius: 12,
-          color: "#e2e8f0",
-          fontSize: 15,
-          outline: "none",
-          fontFamily: sans,
-        }}
-      />
-    </div>
-  ))}
-
-  {/* MESSAGE */}
-  <div style={{ marginBottom: 24 }}>
-    <label style={{
-      display: "block",
-      fontSize: 11,
-      color: "rgba(255,255,255,0.45)",
-      fontFamily: mono,
-      textTransform: "uppercase",
-      letterSpacing: 1.5,
-      marginBottom: 10
-    }}>
-      Message
-    </label>
-
-    <textarea
-      name="message"   // ✅ IMPORTANT
-      placeholder="I'd love to collaborate..."
-      required
-      rows={5}
-      value={formData.message}
-      onChange={e => setFormData({ ...formData, message: e.target.value })}
-      style={{
-        width: "100%",
-        padding: "14px 16px",
-        background: "rgba(255,255,255,0.04)",
-        border: "1px solid rgba(255,255,255,0.1)",
-        borderRadius: 12,
-        color: "#e2e8f0",
-        fontSize: 15,
-        outline: "none",
-        resize: "vertical",
-        fontFamily: sans,
-      }}
-    />
-  </div>
-
-  <button type="submit" style={{
-    width: "100%",
-    padding: 16,
-    borderRadius: 12,
-    background: ACCENT,
-    color: "#fff",
-    border: "none",
-    fontSize: 15,
-    fontWeight: 600,
-    cursor: "pointer"
-  }}>
-    Send Message →
-  </button>
-</form>
-
-          {/* Social */}
-          <div style={{ display: "flex", gap: 14, marginTop: 40, justifyContent: "center" }}>
-            {SOCIAL.map(s => (
-              <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" style={{
-                width: 46, height: 46, borderRadius: "50%",
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: "rgba(255,255,255,0.55)", fontSize: 13, fontWeight: 600,
-                textDecoration: "none", transition: "all .2s", fontFamily: mono,
-              }}
-                onMouseEnter={e => { e.currentTarget.style.background = `${ACCENT}20`; e.currentTarget.style.borderColor = ACCENT; e.currentTarget.style.color = ACCENT; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "rgba(255,255,255,0.55)"; }}
-              >{s.icon}</a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "24px 2rem", textAlign: "center", position: "relative", zIndex: 1 }}>
-        <p style={{ fontSize: 12, color: "rgba(255,255,255,0.22)", fontFamily: mono }}>
-          Crafted with ❤️ · Mainak Roy · 2025 · NIIT University
-        </p>
-      </footer>
-
-      {/* Cinematic Showcase */}
-      {showShowcase && <ProjectShowcase onClose={() => setShowShowcase(false)} />}
-    </div>
-  );
-}
-
-// ─── Project Mini Card ────────────────────────────────────────────────────────
-function ProjectMiniCard({ p, onLaunch }) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={onLaunch}
-      style={{
-        background: hovered ? `${p.color}08` : "rgba(255,255,255,0.025)",
-        border: `1px solid ${hovered ? p.color + "60" : "rgba(255,255,255,0.07)"}`,
-        borderRadius: 18, padding: "1.4rem",
-        cursor: "pointer",
-        transform: hovered ? "translateY(-4px)" : "translateY(0)",
-        transition: "all .28s ease",
-        boxShadow: hovered ? `0 20px 50px ${p.color}22` : "none",
-        position: "relative", overflow: "hidden",
-      }}
-    >
-      <div style={{ fontSize: 30, marginBottom: 10 }}>{p.emoji}</div>
-      <h3 style={{ fontSize: 15, fontWeight: 700, color: "#fff", fontFamily: "'EB Garamond',serif", marginBottom: 8, lineHeight: 1.3 }}>{p.title}</h3>
-      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", lineHeight: 1.8, marginBottom: 12 }}>{p.description}</p>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 12 }}>
-        {p.tech.map(t => (
-          <span key={t} style={{
-            fontSize: 10, padding: "3px 9px",
-            background: `${p.color}18`, color: p.color,
-            borderRadius: 20, border: `1px solid ${p.color}35`,
-            fontFamily: "'JetBrains Mono',monospace",
-          }}>{t}</span>
-        ))}
-      </div>
-      {p.github && (
-        <a href={p.github} target="_blank" rel="noopener noreferrer"
-          onClick={e => e.stopPropagation()}
-          style={{ fontSize: 11, color: p.color, textDecoration: "none", fontFamily: "'JetBrains Mono',monospace" }}>
-          GitHub →
-        </a>
-      )}
-    </div>
-  );
-}
-
-// ─── Experience Card ──────────────────────────────────────────────────────────
-function ExperienceCard({ exp }) {
-  return (
-    <div
-      style={{
-        background: "rgba(255,255,255,0.025)",
-        border: "1px solid rgba(255,255,255,0.07)",
-        borderRadius: 18, padding: "22px 20px",
-        display: "grid", gridTemplateColumns: "48px 1fr auto",
-        gap: 16, alignItems: "start",
-        transition: "border-color .2s",
-      }}
-      onMouseEnter={e => e.currentTarget.style.borderColor = `${exp.color}50`}
-      onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"}
-    >
-      <div style={{
-        width: 48, height: 48, borderRadius: 12, flexShrink: 0,
-        background: `${exp.color}18`, border: `1px solid ${exp.color}40`,
-        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20,
-      }}>{exp.icon}</div>
-      <div>
-        <h3 style={{ fontSize: 16, fontWeight: 700, color: "#fff", marginBottom: 3, fontFamily: "'EB Garamond',serif" }}>{exp.title}</h3>
-        <div style={{ fontSize: 11, color: exp.color, fontFamily: "'JetBrains Mono',monospace", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 10 }}>{exp.org}</div>
-        <ul style={{ paddingLeft: 16, margin: 0 }}>
-          {exp.bullets.map((b, i) => (
-            <li key={i} style={{ fontSize: 14, color: "rgba(255,255,255,0.62)", lineHeight: 1.85, marginBottom: 3 }}>{b}</li>
-          ))}
-        </ul>
-        {exp.link && (
-          <a href={exp.link} target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", marginTop: 10, fontSize: 12, color: exp.color, textDecoration: "none", fontFamily: "'JetBrains Mono',monospace" }}>
-            🐙 View on GitHub →
+      <header className="site-header">
+        <div className="nav-shell">
+          <a className="wordmark" href="#home" onClick={(event) => { event.preventDefault(); navigateTo("home"); }} aria-label="Mainak Roy portfolio home">
+            <span className="wordmark-dot">●</span> PORTFOLIO
           </a>
-        )}
-      </div>
-      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.28)", fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap", paddingTop: 2 }}>{exp.year}</div>
+          <nav className={`desktop-nav${menuOpen ? " nav-open" : ""}`} aria-label="Main navigation">
+            {NAV_LINKS.map(({ label, id }) => (
+              <button key={id} className={activeSection === id ? "nav-link active" : "nav-link"} onClick={() => navigateTo(id)}>
+                {label}
+              </button>
+            ))}
+          </nav>
+          <button className="menu-toggle" onClick={() => setMenuOpen((open) => !open)} aria-expanded={menuOpen} aria-label={menuOpen ? "Close main menu" : "Open main menu"}>
+            <span /><span /><span />
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section id="home" className="hero section-anchor">
+          <div className="hero-copy">
+            <div className="breadcrumb"><span>HOME</span><i>/</i> PORTFOLIO</div>
+            <p className="hero-greeting">Hello, I’m</p>
+            <h1>Mainak <span>Roy</span><b className="cursor">_</b></h1>
+            <p className="hero-role">I’m an <strong key={roles[roleIndex]}>{roles[roleIndex]}</strong></p>
+            <p className="hero-description">
+              I build thoughtful machine-learning and AI systems, from research and data products to reliable backend workflows.
+            </p>
+            <div className="hero-status"><span className="status-light" /> OPEN TO OPPORTUNITIES <span className="status-divider">·</span> NIIT UNIVERSITY ’27</div>
+            <div className="hero-actions">
+              <button className="button button-primary" onClick={() => navigateTo("projects")}>Explore projects <Arrow /></button>
+              <button className="button button-quiet" onClick={() => navigateTo("contact")}>Get in touch</button>
+            </div>
+            <div className="hero-socials" aria-label="Social profiles">
+              {SOCIAL.map(({ name, url, short }) => <a key={name} href={url} target={url.startsWith("http") ? "_blank" : undefined} rel={url.startsWith("http") ? "noreferrer" : undefined}>{short}<span>{name}</span></a>)}
+            </div>
+          </div>
+
+          <div className="hero-visual">
+            <div className="lanyard" aria-hidden="true"><span>MAINAK ROY · DATA SCIENCE</span></div>
+            <div className="card-controls">
+              <span className="card-prompt">A LITTLE ABOUT ME</span>
+              <button className="flip-button" onClick={() => setCardFlipped((flipped) => !flipped)} aria-label={cardFlipped ? "Show profile card front" : "Flip profile card to details"}>
+                {cardFlipped ? "↺" : "⟳"}
+              </button>
+            </div>
+            <button className="profile-card-button" onClick={() => setCardFlipped((flipped) => !flipped)} aria-label="Flip profile card">
+              <span className={`profile-card${cardFlipped ? " is-flipped" : ""}`}>
+                <span className="profile-face profile-front">
+                  <span className="profile-photo-wrap"><img src={portrait} alt="Portrait of Mainak Roy" /></span>
+                  <span className="profile-name">Mainak Roy</span>
+                  <span className="profile-title">{roles[roleIndex]}</span>
+                  <span className="profile-line" />
+                  <span className="profile-serial">NIIT UNIVERSITY · 2027</span>
+                  <span className="profile-stamp">MR<span>AI / ML</span></span>
+                </span>
+                <span className="profile-face profile-back">
+                  <span className="back-label">CURRENT FOCUS</span>
+                  <strong>Agentic AI<br />& decision systems</strong>
+                  <span className="back-rule" />
+                  <span className="back-label">BUILDING WITH</span>
+                  <span className="back-chips">Python · LangGraph · RAG · ML</span>
+                  <span className="back-profile">github.com/Mainaky <Arrow /></span>
+                </span>
+              </span>
+            </button>
+            <p className="card-footnote">TAP TO FLIP <span>·</span> DESIGNED TO THINK IN SYSTEMS</p>
+          </div>
+          <button className="scroll-cue" onClick={() => navigateTo("about")} aria-label="Scroll to about section"><span /> SCROLL TO EXPLORE</button>
+        </section>
+
+        <section id="about" className="section section-anchor">
+          <div className="section-wrap about-grid">
+            <div className="about-intro">
+              <SectionHeading eyebrow="A QUICK INTRODUCTION" title={<>Curiosity, turned<br /><span>into useful systems.</span></>} />
+              <p className="body-copy">I’m a Data Science undergraduate at NIIT University with hands-on experience across agentic AI, retrieval-augmented generation, machine learning, and Python backend development. I enjoy taking complex workflows and making them clearer, measurable, and dependable.</p>
+              <p className="body-copy">My work spans healthcare AI, travel planning, supply-chain decision support, demand forecasting, computer vision, and algorithm research. I’m especially interested in the engineering choices that make AI systems useful beyond a demo.</p>
+              <div className="about-tags"><span>AI systems</span><span>Applied ML</span><span>Data products</span><span>Backend engineering</span></div>
+            </div>
+            <div className="education-card glass-card">
+              <div className="education-top"><span className="education-icon">⌂</span><span className="education-caption">EDUCATION</span><span className="education-index">01 / 01</span></div>
+              <h3>{EDUCATION.university}</h3>
+              <p className="education-place">{EDUCATION.location}</p>
+              <div className="education-rule" />
+              <p className="education-degree">{EDUCATION.degree}</p>
+              <div className="education-meta"><span>{EDUCATION.dates}</span><strong>CGPA {EDUCATION.cgpa}</strong></div>
+              <p className="education-caption coursework-label">RELEVANT COURSEWORK</p>
+              <div className="coursework">{EDUCATION.coursework.map((course) => <span key={course}>{course}</span>)}</div>
+            </div>
+          </div>
+        </section>
+
+        <section id="skills" className="section section-anchor section-tinted">
+          <div className="section-wrap">
+            <SectionHeading eyebrow="TOOLS, METHODS & TECHNOLOGIES" title={<>A broad toolkit.<br /><span>One curious engineer.</span></>} note="Grouped around the kinds of problems I like solving." />
+            <div className="skill-grid">
+              {SKILL_GROUPS.map((group, index) => (
+                <article className="skill-card glass-card" key={group.title}>
+                  <div className="skill-card-top"><span className="skill-number">0{index + 1}</span><span className="skill-mark">✳</span></div>
+                  <h3>{group.title}</h3>
+                  <div className="skill-chips">{group.skills.map((skill) => <span key={skill}>{skill}</span>)}</div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="projects" className="section section-anchor">
+          <div className="section-wrap">
+            <SectionHeading eyebrow={`SELECTED WORK · ${PROJECTS.length} PROJECTS`} title={<>Ideas made<br /><span>concrete.</span></>} note="From systems that coordinate specialist AI agents to applied ML, data products, and research. The project details below combine the work already on my portfolio with the additional projects in my resumes." />
+            <div className="project-grid">
+              {PROJECTS.map((project, index) => (
+                <article key={project.id} className={`project-card glass-card tone-${project.color}${index === 0 ? " project-featured" : ""}`}>
+                  <div className="project-topline"><span>{project.category}</span><span className="project-index">{String(index + 1).padStart(2, "0")}</span></div>
+                  <div className="project-icon">{project.emoji}</div>
+                  <h3>{project.title}</h3>
+                  <p className="project-subtitle">{project.subtitle}</p>
+                  <p className="project-description">{project.description}</p>
+                  <ul className="project-details">{project.details.map((detail) => <li key={detail}>{detail}</li>)}</ul>
+                  <div className="project-tech">{project.tech.map((tech) => <span key={tech}>{tech}</span>)}</div>
+                  <div className="project-footer">
+                    <span className="project-status"><i /> {project.status}</span>
+                    {project.href && <a href={project.href} target="_blank" rel="noreferrer">{project.linkLabel} <Arrow /></a>}
+                    {project.sourceHref && <a href={project.sourceHref} target="_blank" rel="noreferrer">View source <Arrow /></a>}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="experience" className="section section-anchor section-tinted">
+          <div className="section-wrap experience-layout">
+            <div className="experience-heading">
+              <SectionHeading eyebrow="EXPERIENCE & RESEARCH" title={<>Learning by<br /><span>doing the work.</span></>} note="Industry experience, research, and campus leadership." />
+            </div>
+            <div className="timeline">
+              {EXPERIENCE.map((item) => (
+                <article key={item.role} className={`timeline-item tone-${item.color}`}>
+                  <div className="timeline-marker"><i /></div>
+                  <div className="timeline-card glass-card">
+                    <div className="timeline-date">{item.date}</div>
+                    <h3>{item.role}</h3>
+                    <p className="timeline-org">{item.organization}</p>
+                    <p className="timeline-description">{item.description}</p>
+                    <ul>{item.points.map((point) => <li key={point}>{point}</li>)}</ul>
+                    {item.href && <a className="text-link" href={item.href} target="_blank" rel="noreferrer">View related work <Arrow /></a>}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="highlights" className="section section-anchor">
+          <div className="section-wrap">
+            <SectionHeading eyebrow="RECOGNITION & LEADERSHIP" title={<>Milestones along<br /><span>the way.</span></>} note="Research, technical contributions, and the communities I’ve helped build." />
+            <div className="highlight-grid">
+              {HIGHLIGHTS.map((item, index) => (
+                <article className={`highlight-card glass-card tone-${item.color}`} key={item.title}>
+                  <div className="highlight-top"><span className="highlight-icon">{item.icon}</span><span>0{index + 1}</span></div>
+                  <span className="highlight-label">{item.label}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                  {item.href && <a className="text-link" href={item.href} target="_blank" rel="noreferrer">See project <Arrow /></a>}
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="section section-anchor contact-section">
+          <div className="section-wrap contact-grid">
+            <div>
+              <SectionHeading eyebrow="START A CONVERSATION" title={<>Let’s build<br /><span>something useful.</span></>} />
+              <p className="body-copy contact-copy">Have a role, research idea, or interesting problem in mind? I’d be glad to hear from you.</p>
+              <a className="email-link" href="mailto:mainak.roy23@st.niituniversity.in">mainak.roy23@st.niituniversity.in <Arrow /></a>
+              <div className="contact-socials">{SOCIAL.filter((item) => item.name !== "Email").map((item) => <a key={item.name} href={item.url} target="_blank" rel="noreferrer">{item.name} <Arrow /></a>)}</div>
+            </div>
+            <form className="contact-form glass-card" onSubmit={sendEmail}>
+              <div className="form-heading"><span className="eyebrow">SEND A NOTE</span><span className="form-live"><i /> OPEN TO OPPORTUNITIES</span></div>
+              <label htmlFor="contact-name">NAME</label>
+              <input id="contact-name" name="name" placeholder="Your name" autoComplete="name" required />
+              <label htmlFor="contact-email">EMAIL</label>
+              <input id="contact-email" name="email" type="email" placeholder="you@example.com" autoComplete="email" required />
+              <label htmlFor="contact-message">MESSAGE</label>
+              <textarea id="contact-message" name="message" rows="4" placeholder="What would you like to talk about?" required />
+              <button className="button button-primary send-button" type="submit" disabled={formStatus === "sending"}>{formStatus === "sending" ? "Sending…" : <>Send message <Arrow /></>}</button>
+              {formStatus === "sent" && <p className="form-feedback success" role="status">Thanks — your message has been sent.</p>}
+              {formStatus === "error" && <p className="form-feedback error" role="alert">The message could not be sent. Please email me directly.</p>}
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <div className="footer-main section-wrap">
+          <div className="footer-brand"><a className="wordmark" href="#home" onClick={(event) => { event.preventDefault(); navigateTo("home"); }}><span className="wordmark-dot">●</span> PORTFOLIO</a><p>Data science, AI engineering, and thoughtful systems.</p></div>
+          <div className="footer-links"><span className="eyebrow">EXPLORE</span>{NAV_LINKS.map(({ label, id }) => <button key={id} onClick={() => navigateTo(id)}>{label}</button>)}</div>
+          <div className="footer-links"><span className="eyebrow">CONNECT</span>{SOCIAL.map(({ name, url }) => <a key={name} href={url} target={url.startsWith("http") ? "_blank" : undefined} rel={url.startsWith("http") ? "noreferrer" : undefined}>{name} <Arrow /></a>)}</div>
+        </div>
+        <div className="footer-bottom section-wrap"><span>© {new Date().getFullYear()} Mainak Roy</span><button onClick={() => navigateTo("home")}>Back to top ↑</button><span>BUILT WITH CURIOSITY</span></div>
+      </footer>
     </div>
   );
 }
-

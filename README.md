@@ -1,85 +1,42 @@
-# Mainak Roy — Cinematic Portfolio
+# Mainak Roy — Portfolio
 
-Dark cinematic portfolio built with **React 18** (no Tailwind needed — uses inline styles for portability).
+A responsive, single-page portfolio for Mainak Roy, an AI/ML Engineer and Data Science undergraduate at NIIT University. Built with React 18 and Create React App, with a dark navy visual system, soft blue-violet lighting, glass panels, animated role text, and a flip-card profile badge.
 
-## 🚀 Run Locally
+## Run locally
 
 ```bash
-# 1. Enter the folder
-cd mainak-cinematic
-
-# 2. Install
 npm install
-
-# 3. Start
 npm start
-# Opens at http://localhost:3000
 ```
 
-## 📦 Build for Production
+The development server opens at `http://localhost:3000`.
+
+## Production build
 
 ```bash
 npm run build
-# Output in /build folder — ready to deploy
 ```
 
----
+Create React App writes the deployable site to `build/`. The project can be imported into Vercel with the standard Create React App build settings.
 
-## 🌐 Deploy FREE on Vercel (recommended)
+## Portfolio sections
 
-1. Push this folder to a **GitHub repository**
-2. Go to [vercel.com](https://vercel.com) → **New Project** → Import your repo
-3. Framework: **Create React App** (auto-detected)
-4. Click **Deploy** — live URL in ~60 seconds!
+- **About:** profile, education, coursework, and focus areas.
+- **Skills:** programming/data, machine learning, agentic AI, web/backend, and cloud/data platforms.
+- **Projects:** eight entries covering the original portfolio work and projects from the supplied resumes. NeuroSeg combines the existing brain-tumor project with its expanded resume details.
+- **Experience:** GSPL software engineering internship, ISRO hackathon, ICICV research, and campus leadership.
+- **Highlights:** publication, hackathon, certification, and leadership.
+- **Contact:** EmailJS contact form, email link, GitHub, and LinkedIn.
 
----
+## Main files
 
-## 🌐 Deploy on GitHub Pages
-
-```bash
-# Install gh-pages
-npm install -D gh-pages
-
-# Add to package.json "scripts":
-#   "predeploy": "npm run build",
-#   "deploy": "gh-pages -d build"
-
-# Add to package.json root:
-#   "homepage": "https://Mainaky.github.io/portfolio"
-
-npm run deploy
-# Live at: https://Mainaky.github.io/portfolio
-```
-
----
-
-## 📁 Project Structure
-
-```
+```text
 src/
-├── App.jsx                  ← Full portfolio (Hero, About, Skills, Projects, Experience, Contact)
-├── index.js                 ← Entry point
-├── index.css                ← Global resets + keyframe animations
-├── data.js                  ← ALL content (edit this to update anything!)
+├── App.jsx                 # Page layout, navigation, profile card, form, and sections
+├── data.js                 # Project, skill, education, experience, and link content
+├── index.css               # Responsive design system and animations
+├── index.js                # React entry point
 └── components/
-    ├── SkillBar.jsx          ← Animated scroll-triggered skill bars
-    └── ProjectShowcase.jsx   ← Cinematic countdown + project reveal overlay
+    ├── ProjectShowcase.jsx # Cinematic showcase component retained from the original site
+    └── SkillBar.jsx        # Original animated skill bar component retained from the original site
 ```
-
-## ✏️ To Edit Your Content
-
-Everything is in **`src/data.js`**:
-- `SKILLS` — skill names, levels, categories
-- `PROJECTS` — titles, descriptions, GitHub links, tech stack
-- `EXPERIENCE` — work/research experience
-- `ABOUT_CARDS` — education/status info cards
-- `SOCIAL` — GitHub, LinkedIn, Email links
-
-## ✨ Features
-
-- 🎬 **Cinematic Project Showcase** — 3-2-1 countdown → animated project cards with left/right alternating layout
-- 📊 **Animated Skill Bars** — scroll-triggered fill animations per category
-- 🌑 **Dark theme** with purple/teal gradient accents
-- 📱 **Fully responsive** — mobile hamburger menu
-- ✉️ **Contact form** with sent confirmation state
-- 🔗 **All GitHub links** open in new tab
